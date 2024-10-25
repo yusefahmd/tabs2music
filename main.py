@@ -1,42 +1,40 @@
-from midiutil import MIDIFile
+from pathlib import Path
+from midi_and_wav_creation import notes_to_midi, midi_to_wav
+from tabs_parser import read_tabs_file
 
+TABS_FILE_PATH = "/Users/yahmed/Documents/tabs2music/examples/all_in_the_waiting.txt"
+# TABS_FILE_PATH = ""
+SOUNDFONT_PATH = "/Users/yahmed/Documents/Guitars-Universal-V1.5.sf2"
+# SOUNDFONT_PATH = "/Users/yahmed/Documents/Guitars-Universal-V1.5.sf2"
+AUDIO_SAVE_PATH = "/Users/yahmed/Documents/tabs2music/examples"
+# MIDI_SAVE_PATH = "/Users/yahmed/Documents/tabs2music/major-scale.mid"
 
-# Reads the text file and parses the tabs into an array of six strings to be used with midi
-def read_tabs_file(filepath):
-    with open(filepath) as f:
-        # All but the last line ends with a "\n", so remove them to be formatted
-        lines = [line.rstrip('\n') for line in f]
-        
-        # Check if all lines are formatted properly
-        for line in lines:
-            if line[2] != "|" or line[-1] != "|":
-                print("""Format error: every line needs to match the following pattern
-                    *string letter* |-*fret numbers*-|""")
-                return
-    
-    # If there are multiple mentions of a string, append them all in the right order in one string
-    # Before doing any appending, make sure each block has the right format (make the check above into a function)
-            
-    return lines
+# TODO: When I'm finished, make sure it runs on Windows
+# tabs_path: a path to the .txt file containing the tabs input. The name of the file is the song name
+# audio_save_path: a path to the directory the .midi and .wav files should be saved to
+# soundfont_path: a path to the soundfont file
+# save_midi (optional): if True, the .midi file will be saved, otherwise it is deleted
+# play_midi (optional): if True, the .midi file will be played via the terminal on creation, otherwise nothing is played
+# tempo (optional): measured in bpm, and changing the value from the default 120 will change the speed of the song
+def main(tabs_path, audio_save_path, soundfont_path, save_midi=False, play_midi=False, tempo=120):
+    # This returns the parsed output from the tabs file, and the song name
+    notes, song_name = read_tabs_file(tabs_path)
 
+    # The Path object ensures the file paths are handled as needed for any OS
+    audio_save_path = Path(audio_save_path)
+    audio_file_path = audio_save_path / song_name
+    midi_save_path = str(audio_file_path.with_suffix('.midi'))
+    wav_save_path = str(audio_file_path.with_suffix('.wav'))
 
-def main(filepath, tempo):
-    # Get the notes from the file
-    lines = read_tabs_file(filepath)
+    # The parsed tabs are converted to a MIDI file, and then that is converted to a wav file
+    notes_to_midi(notes, midi_save_path, tempo)
+    midi_to_wav(soundfont_path, midi_save_path, wav_save_path, play_midi) 
 
-    # Initialize the MIDIFile object (with 1 track)
-    guitar_degrees = list(reversed([52, 57, 62, 67, 71, 76]))
-    track    = 0
-    channel  = 0
-    time     = 0    # In beats
-    duration = 1    # In beats
-    tempo    = tempo   # In BPM
-    volume   = 100  # 0-127, as per the MIDI standard
-    song = MIDIFile(1)
-    song.addTempo(track, time, tempo)
+    # The intermediate MIDI file is deleted by default, however the user can specify it should be saved
+    if not save_midi:
+        midi_path = Path(midi_save_path)
+        midi_path.unlink()
 
 
 if __name__ == "__main__":
-    filepath = "test.txt" # Replace this with an input method, or something similar (maybe default to test.txt)
-    tempo = 60 # Find a better way to get this value (either input or stored in the .txt file)
-    main(filepath, tempo)
+    main(TABS_FILE_PATH, AUDIO_SAVE_PATH, SOUNDFONT_PATH, tempo=200)
