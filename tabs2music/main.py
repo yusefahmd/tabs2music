@@ -1,22 +1,15 @@
 from pathlib import Path
-from midi_and_wav_creation import notes_to_midi, midi_to_wav
-from tabs_parser import read_tabs_file
+from .midi_and_wav_creation import notes_to_midi, midi_to_wav
+from .tabs_parser import read_tabs_file
 
-TABS_FILE_PATH = "/Users/yahmed/Documents/tabs2music/examples/all_in_the_waiting.txt"
-# TABS_FILE_PATH = ""
-SOUNDFONT_PATH = "/Users/yahmed/Documents/Guitars-Universal-V1.5.sf2"
-# SOUNDFONT_PATH = "/Users/yahmed/Documents/Guitars-Universal-V1.5.sf2"
-AUDIO_SAVE_PATH = "/Users/yahmed/Documents/tabs2music/examples"
-# MIDI_SAVE_PATH = "/Users/yahmed/Documents/tabs2music/major-scale.mid"
 
-# TODO: When I'm finished, make sure it runs on Windows
 # tabs_path: a path to the .txt file containing the tabs input. The name of the file is the song name
 # audio_save_path: a path to the directory the .midi and .wav files should be saved to
 # soundfont_path: a path to the soundfont file
 # save_midi (optional): if True, the .midi file will be saved, otherwise it is deleted
 # play_midi (optional): if True, the .midi file will be played via the terminal on creation, otherwise nothing is played
 # tempo (optional): measured in bpm, and changing the value from the default 120 will change the speed of the song
-def main(tabs_path, audio_save_path, soundfont_path, save_midi=False, play_midi=False, tempo=120):
+def run(tabs_path, audio_save_path, soundfont_path, save_midi=False, play_midi=False, tempo=120):
     # This returns the parsed output from the tabs file, and the song name
     notes, song_name = read_tabs_file(tabs_path)
 
@@ -34,7 +27,3 @@ def main(tabs_path, audio_save_path, soundfont_path, save_midi=False, play_midi=
     if not save_midi:
         midi_path = Path(midi_save_path)
         midi_path.unlink()
-
-
-if __name__ == "__main__":
-    main(TABS_FILE_PATH, AUDIO_SAVE_PATH, SOUNDFONT_PATH, tempo=200)
