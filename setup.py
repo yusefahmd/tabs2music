@@ -10,6 +10,8 @@ setup(
     ],
     author="Yusef Ahmed",
     description="Converts guitar tabs (.txt) into audio (.wav)",
+    license='MIT',
+    url='https://github.com/yusefahmd/tabs2music',
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown"
 )
