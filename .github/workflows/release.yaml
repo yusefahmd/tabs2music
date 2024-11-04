@@ -83,7 +83,7 @@ jobs:
       - name: Set project version in setup.py
         run: |
           NEW_VERSION="${{ needs.details.outputs.new_version }}"
-          sed -i "s/version=\"[0-9.]*\"/version=\"$NEW_VERSION\"/" setup.py
+          sed -i "s/^\([[:space:]]*\)version=\"[0-9.]*\"/\1version=\"$NEW_VERSION\"/" setup.py
           echo "Updated setup.py to version $NEW_VERSION"
 
       - name: Install dependencies
