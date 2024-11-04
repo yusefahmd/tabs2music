@@ -77,10 +77,13 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install setuptools and wheel
+        run: pip install setuptools wheel
+
       - name: Set project version in setup.py
         run: |
           NEW_VERSION="${{ needs.details.outputs.new_version }}"
-          sed -i "s/version=\"[^\"]*\"/version=\"$NEW_VERSION\"/" setup.py
+          sed -i "s/version=\"[0-9.]*\"/version=\"$NEW_VERSION\"/" setup.py
           echo "Updated setup.py to version $NEW_VERSION"
 
       - name: Install dependencies
