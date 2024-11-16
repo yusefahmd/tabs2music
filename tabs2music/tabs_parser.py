@@ -1,30 +1,41 @@
 import re
 from pathlib import Path
-from .tuning_to_midi_note import tuning_to_midi_note_mapping
+from tuning_to_midi_note import tuning_to_midi_note_mapping
 
 
 # Reads the tabs file and for each guitar string, it extracts the tuning and their notes
 def read_tabs_file(tabs_path):
+    # The name of the tabs file is used as the song name
+    song_name = extract_file_name(tabs_path)
+    
+    guitar_tunings = []
     guitar_strings = []
 
     with open(tabs_path) as tabs:
         for string in tabs:
             tuning, notes = extract_string_notes(string)
-
-            # The fret numbers in tabs don't mean anything to MIDI, so we have to convert them
-            # The midi_number is the MIDI value of the open string, and we add to it the fret number
-            midi_number = tuning_to_midi_note_mapping(tuning)
-            for i, note in enumerate(notes):
-                if type(note) == str:
-                    continue
-                else:
-                    notes[i] = note + midi_number
+            guitar_tunings.append(tuning)
             guitar_strings.append(notes)
     
-    # The name of the tabs file is used as the song name
-    song_name = extract_file_name(tabs_path)
+    return song_name, guitar_tunings, guitar_strings
 
-    return guitar_strings, song_name
+
+# TODO: explain
+def tune_midi_notes(guitar_tunings, guitar_strings):
+    midi_notes = []
+
+    for tuning, notes in zip(guitar_tunings, guitar_strings):
+        # The fret numbers in tabs don't mean anything to MIDI, so we have to convert them
+        # The midi_number is the MIDI value of the open string, and we add to it the fret number
+        midi_number = tuning_to_midi_note_mapping(tuning)
+        for i, note in enumerate(notes):
+            if type(note) == str:
+                continue
+            else:
+                notes[i] = note + midi_number
+        midi_notes.append(notes)
+
+    return midi_notes
 
 
 # Takes a string representing a single guitar string's notes, and returns the notes and the string's tuning

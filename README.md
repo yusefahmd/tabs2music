@@ -33,7 +33,7 @@ Now lets put these two halves together. Here is an example of a string tuned to 
 ### Allowed notation
 Once you have defined a string, you can start writing notes to be played on that string. Each note is surrounded by a "-", which makes it a bit easier to read the tabs. This can already be seen above in the section [Creating a guitar string](#creating-a-guitar-string). Here are the currently supported options:
 - **A number:** When writing a number, this indicates the fret to play on the string.
-- **A note extension** (~)**:** After a note has been played (indicated by a number), each "~" directly after it will extend the note for as many "~"s used. Here is an example that plays an open low E for four beats: "E2 |-0-~-~-~-|".
+- **A note extension** (\~)**:** After a note has been played (indicated by a number), each "\~" directly after it will extend the note for as many "\~"s used. Here is an example that plays an open low E for four beats: `E2 |-0-~-~-~-|`.
 - **A rest** (-)**:** This is used when neither a number or "~" are specified. It simply doesn't play anything on the string for a single beat.
 
 
