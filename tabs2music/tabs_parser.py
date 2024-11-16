@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from tuning_to_midi_note import tuning_to_midi_note_mapping
+from .tuning_to_midi_note import tuning_to_midi_note_mapping
 
 
 # Reads the tabs file and for each guitar string, it extracts the tuning and their notes

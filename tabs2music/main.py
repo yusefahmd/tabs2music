@@ -1,6 +1,6 @@
 from pathlib import Path
-from midi_and_wav_creation import notes_to_midi, midi_to_wav
-from tabs_parser import read_tabs_file, tune_midi_notes
+from .midi_and_wav_creation import notes_to_midi, midi_to_wav
+from .tabs_parser import read_tabs_file, tune_midi_notes
 
 
 # tabs_path: a path to the .txt file containing the tabs input. The name of the file is the song name

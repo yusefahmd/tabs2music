@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tabs2music",
-    version="0.0.10",
+    version="0.0.11",
     packages=find_packages(),
     install_requires=[
         "midi2audio==0.1.1",
