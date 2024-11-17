@@ -4,20 +4,30 @@ from .tuning_to_midi_note import tuning_to_midi_note_mapping
 
 
 # Reads the tabs file and for each guitar string, it extracts the tuning and their notes
-def read_tabs_file(tabs_path):
+# Has an optional riff_script parameter, don't mess with this as it is controlled via run in main
+def read_tabs_file(tabs_path, for_riff_script=False):
     # The name of the tabs file is used as the song name
     song_name = extract_file_name(tabs_path)
     
     guitar_tunings = []
     guitar_strings = []
+    riff_script_strings = []
 
     with open(tabs_path) as tabs:
         for string in tabs:
-            tuning, notes = extract_string_notes(string)
+            if for_riff_script:
+                tuning, notes, riff_script_notes = extract_string_notes(string, for_riff_script)
+                riff_script_strings.append(riff_script_notes)
+            else:
+                tuning, notes = extract_string_notes(string)
             guitar_tunings.append(tuning)
             guitar_strings.append(notes)
     
-    return song_name, guitar_tunings, guitar_strings
+    # If the call of read_tabs_file is meant for the esoteric language RiffScript, there needs to be an extra return variable
+    if for_riff_script:
+        return song_name, guitar_tunings, guitar_strings, riff_script_strings
+    else:
+        return song_name, guitar_tunings, guitar_strings
 
 
 # TODO: explain
@@ -39,7 +49,7 @@ def tune_midi_notes(guitar_tunings, guitar_strings):
 
 
 # Takes a string representing a single guitar string's notes, and returns the notes and the string's tuning
-def extract_string_notes(input_string):
+def extract_string_notes(input_string, for_riff_script=False):
     # This regex expression finds the tuning of the string
     tuning_pattern = r'^[a-zA-Z#b]+\d+'
     tuning = re.match(tuning_pattern, input_string).group(0)
@@ -73,7 +83,7 @@ def extract_string_notes(input_string):
         i += 2
 
     
-    return tuning, notes
+    return tuning, notes, middle_part
 
 
 # This function returns the name of a file (without the file extension), which is used as the song name

@@ -10,9 +10,12 @@ from .tabs_parser import read_tabs_file, tune_midi_notes
 # play_midi (optional): if True, the .midi file will be played via the terminal on creation, otherwise nothing is played
 # tempo (optional): measured in bpm, and changing the value from the default 120 will change the speed of the song
 # riff_script (optional): should only be set to True if the call of run is done within RiffScript, an esoteric language that uses tabs2music as an add-on
-def run(tabs_path, audio_save_path, soundfont_path, save_midi=False, play_midi=False, tempo=120, riff_script=False):
+def run(tabs_path, audio_save_path, soundfont_path, save_midi=False, play_midi=False, tempo=120, for_riff_script=False):
     # This returns the parsed output from the tabs file, and the song name TODO: fix this explanation
-    song_name, guitar_tunings, guitar_strings = read_tabs_file(tabs_path)
+    if for_riff_script:
+        song_name, guitar_tunings, guitar_strings, riff_script_strings = read_tabs_file(tabs_path, for_riff_script)
+    else:
+        song_name, guitar_tunings, guitar_strings = read_tabs_file(tabs_path)
     midi_notes = tune_midi_notes(guitar_tunings, guitar_strings)
 
     # The Path object ensures the file paths are handled as needed for any OS
@@ -31,5 +34,5 @@ def run(tabs_path, audio_save_path, soundfont_path, save_midi=False, play_midi=F
         midi_path.unlink()
 
     # The run function will return the parsed guitar_string notes to RiffScript as it needs the tab numbers, not the midi numbers
-    if riff_script:
-        return guitar_strings
+    if for_riff_script:
+        return riff_script_strings
