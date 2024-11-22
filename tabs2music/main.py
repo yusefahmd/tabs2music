@@ -36,5 +36,3 @@ def run(tabs_path, audio_save_path, soundfont_path, save_midi=False, play_midi=F
     # The run function will return the parsed guitar_string notes to RiffScript as it needs the tab numbers, not the midi numbers
     if for_riff_script:
         return riff_script_strings
-
-run("/Users/yahmed/Documents/test_tabs2music/tabs.txt", "/Users/yahmed/Documents/test_tabs2music", "/Users/yahmed/Documents/test_tabs2music/Guitars-Universal-V1.5.sf2", play_midi=True, tempo=200)
