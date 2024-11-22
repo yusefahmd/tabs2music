@@ -19,7 +19,7 @@ def read_tabs_file(tabs_path, for_riff_script=False):
                 tuning, notes, riff_script_notes = extract_string_notes(string, for_riff_script)
                 riff_script_strings.append(riff_script_notes)
             else:
-                tuning, notes = extract_string_notes(string)
+                tuning, notes, riff_script_strings = extract_string_notes(string)
             guitar_tunings.append(tuning)
             guitar_strings.append(notes)
     
